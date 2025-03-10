@@ -1,5 +1,5 @@
-function Total(props) {
-  const result = props.exs1 + props.exs2 + props.exs3;
+function Total({ exs1, exs2, exs3 }) {
+  const result = exs1 + exs2 + exs3;
 
   console.log(`Total exercises ${result} from Total component`);
 

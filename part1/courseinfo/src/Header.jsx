@@ -1,5 +1,5 @@
-function Header(prop) {
-    const course = prop.course
+function Header({ course }) { // apply destructuring
+    // const course = prop.course // the traditional way with props
   
     return (
       <>
