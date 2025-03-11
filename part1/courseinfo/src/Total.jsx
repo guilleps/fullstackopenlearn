@@ -1,5 +1,7 @@
-function Total({ exs1, exs2, exs3 }) {
-  const result = exs1 + exs2 + exs3;
+function Total({ parts }) {
+  // console.log(parts);
+
+  const result = parts[0].exercises + parts[1].exercises + parts[2].exercises;
 
   console.log(`Total exercises ${result} from Total component`);
 
