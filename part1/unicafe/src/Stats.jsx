@@ -1,8 +1,8 @@
-const Stats = ({ text, value }) => {
+const Stats = ({ text, value, symbol }) => {
   return (
     <>
       <p>
-        {text} {value}
+        {text} {value} {symbol}
       </p>
     </>
   );

@@ -8,21 +8,25 @@ const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
+  const [all, setAll] = useState(0);
 
   const countGood = () => {
-    const newValueGood = good + 1;
-    setGood(newValueGood);
+    setGood(good + 1);
+    setAll(all + 1);
   };
 
   const countNeutral = () => {
-    const newValueNeutral = neutral + 1;
-    setNeutral(newValueNeutral);
+    setNeutral(neutral + 1);
+    setAll(all + 1);
   };
 
   const countBad = () => {
-    const newValueBad = bad + 1;
-    setBad(newValueBad);
+    setBad(bad + 1);
+    setAll(all + 1);
   };
+
+  const calcAverage = () => (all === 0 ? 0 : (good - bad) / all);
+  const calcPositive = () => (all === 0 ? 0 : (good / all) * 100);
 
   return (
     <>
@@ -38,6 +42,10 @@ const App = () => {
         <Stats text="good" value={good} />
         <Stats text="neutral" value={neutral} />
         <Stats text="bad" value={bad} />
+
+        <Stats text="all" value={all} />
+        <Stats text="average" value={calcAverage()} />
+        <Stats text="positive" value={calcPositive()} symbol="%" />
       </div>
     </>
   );
