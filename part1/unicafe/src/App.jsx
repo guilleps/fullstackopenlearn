@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Button from "./Button";
 import Title from "./Title";
-import Stats from "./Stats";
+import Statistics from "./Statistics";
 
 const App = () => {
   // guarda los clics de cada botón en su propio estado
@@ -39,13 +39,13 @@ const App = () => {
 
         <Title text="statistics" />
 
-        <Stats text="good" value={good} />
-        <Stats text="neutral" value={neutral} />
-        <Stats text="bad" value={bad} />
+        <Statistics text="good" value={good} />
+        <Statistics text="neutral" value={neutral} />
+        <Statistics text="bad" value={bad} />
 
-        <Stats text="all" value={all} />
-        <Stats text="average" value={calcAverage()} />
-        <Stats text="positive" value={calcPositive()} symbol="%" />
+        <Statistics text="all" value={all} />
+        <Statistics text="average" value={calcAverage()} />
+        <Statistics text="positive" value={calcPositive()} symbol="%" />
       </div>
     </>
   );

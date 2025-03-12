@@ -1,4 +1,4 @@
-const Stats = ({ text, value, symbol }) => {
+const Statistics = ({ text, value, symbol }) => {
   return (
     <>
       <p>
@@ -8,4 +8,4 @@ const Stats = ({ text, value, symbol }) => {
   );
 };
 
-export default Stats;
+export default Statistics;
