@@ -30,29 +30,33 @@ const App = () => {
 
   return (
     <>
-      <div>
-        <Title text="give feedback" />
+      <Title text="give feedback" />
 
-        <Button handleClick={countGood} text="good" />
-        <Button handleClick={countNeutral} text="neutral" />
-        <Button handleClick={countBad} text="bad" />
+      <Button handleClick={countGood} text="good" />
+      <Button handleClick={countNeutral} text="neutral" />
+      <Button handleClick={countBad} text="bad" />
 
-        <Title text="statistics" />
+      <Title text="statistics" />
 
-        {all === 0 ? (
-          <p>No feedback given</p>
-        ) : (
-          <>
-            <Statistics text="good" value={good} />
-            <Statistics text="neutral" value={neutral} />
-            <Statistics text="bad" value={bad} />
+      {all === 0 ? (
+        <p>No feedback given</p>
+      ) : (
+        <>
+          {/* exponemos la etiqueta table y tbody para evitar problema con el
+            div del componente hijo */}
+          <table>
+            <tbody>
+              <Statistics text="good" value={good} />
+              <Statistics text="neutral" value={neutral} />
+              <Statistics text="bad" value={bad} />
 
-            <Statistics text="all" value={all} />
-            <Statistics text="average" value={calcAverage()} />
-            <Statistics text="positive" value={calcPositive()} symbol="%" />
-          </>
-        )}
-      </div>
+              <Statistics text="all" value={all} />
+              <Statistics text="average" value={calcAverage()} />
+              <Statistics text="positive" value={calcPositive()} symbol="%" />
+            </tbody>
+          </table>
+        </>
+      )}
     </>
   );
 };
