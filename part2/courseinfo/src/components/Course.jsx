@@ -1,14 +1,13 @@
 import Header from "./Header";
 import Content from "./Content";
 
-const Course = ({ course }) => {
-//   console.log("from Course Component", course);
-//   console.log("from Course Component", course.parts);
+const Course = ({ courses }) => {
+  const title = "Web development curriculum";
 
   return (
     <>
-      <Header text={course.name} />
-      <Content parts={course.parts} />
+      <Header text={title} />
+      {courses.map(course => <Content key={course.id} course={course} /> )}
     </>
   );
 };
