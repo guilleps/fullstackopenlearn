@@ -1,5 +1,13 @@
 import { useState } from "react";
 
+const Button = ({ handleClick, textButton }) => {
+  return (
+    <>
+      <button onClick={handleClick}>{textButton}</button>
+    </>
+  );
+};
+
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -13,16 +21,26 @@ const App = () => {
   ];
 
   const [selected, setSelected] = useState(0);
+  const [vote, setVote] = useState(Array(anecdotes.length).fill(0));
+  console.log("votes", vote);
 
   const randomAnecdote = () => {
     const random = Math.floor(Math.random() * anecdotes.length);
     setSelected(random);
   };
 
+  const addVote = (position) => {
+    const copy = [...vote]; // copia del array - no es posible modificarlo directamente (principle of immutability)
+    copy[position] += 1;
+    setVote(copy); // envia el arreglo entero con la posicion sumada
+  };
+
   return (
     <>
       {anecdotes[selected]} <br />
-      <button onClick={randomAnecdote}>next anecdote</button>
+      has {vote[selected]} votes <br />
+      <Button handleClick={() => addVote(selected)} textButton="vote" />
+      <Button handleClick={randomAnecdote} textButton="next anecdote" />
     </>
   );
 };
