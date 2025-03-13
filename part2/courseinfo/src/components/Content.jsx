@@ -1,12 +1,19 @@
 import Part from "./Part";
+import Total from "./Total";
 
-const Content = ({ courses }) => {
-//   console.log("from Content Component", courses);
+const Content = ({ parts }) => {
+  // reduce -> (acumulador, valorActual) => acumulador + valorActual, valorInicial
+  const totalExercises = parts.reduce((temp, part) => {
+    console.log("recorrido", temp, part);
+    return temp + part.exercises;
+  }, 0);
+
   return (
     <>
-      {courses.map((course) => (
-        <Part key={course.id} name={course.name} exercises={course.exercises} />
+      {parts.map((part) => (
+        <Part key={part.id} name={part.name} exercises={part.exercises} />
       ))}
+      <Total total={totalExercises} />
     </>
   );
 };

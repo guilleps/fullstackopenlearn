@@ -8,7 +8,7 @@ const Course = ({ course }) => {
   return (
     <>
       <Header text={course.name} />
-      <Content courses={course.parts} />
+      <Content parts={course.parts} />
     </>
   );
 };

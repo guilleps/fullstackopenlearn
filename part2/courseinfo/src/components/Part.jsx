@@ -1,11 +1,7 @@
-const Part = ({ name, exercises }) => {
-  return (
-    <>
-      <p>
-        {name} {exercises}
-      </p>
-    </>
-  );
-};
+const Part = ({ name, exercises }) => (
+  <p>
+    {name} {exercises}
+  </p>
+);
 
 export default Part;
