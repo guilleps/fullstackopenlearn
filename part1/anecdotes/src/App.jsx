@@ -1,12 +1,8 @@
 import { useState } from "react";
 
-const Button = ({ handleClick, textButton }) => {
-  return (
-    <>
-      <button onClick={handleClick}>{textButton}</button>
-    </>
-  );
-};
+const Button = ({ handleClick, textButton }) => <button onClick={handleClick}>{textButton}</button>;
+
+const Title = ({ text }) => <h1>{text}</h1>;
 
 const App = () => {
   const anecdotes = [
@@ -24,23 +20,41 @@ const App = () => {
   const [vote, setVote] = useState(Array(anecdotes.length).fill(0));
   console.log("votes", vote);
 
+  const [mostVote, setMostVote] = useState(0);
+
   const randomAnecdote = () => {
     const random = Math.floor(Math.random() * anecdotes.length);
     setSelected(random);
   };
 
   const addVote = (position) => {
-    const copy = [...vote]; // copia del array - no es posible modificarlo directamente (principle of immutability)
-    copy[position] += 1;
-    setVote(copy); // envia el arreglo entero con la posicion sumada
+    setVote(prevVotes => {
+      const newVotes = [...prevVotes];
+      newVotes[position] += 1;
+  
+      const index = newVotes.indexOf(Math.max(...newVotes));
+      setMostVote(index);
+      return newVotes;
+    });
   };
 
   return (
     <>
-      {anecdotes[selected]} <br />
-      has {vote[selected]} votes <br />
+      <Title text="Anecdote of the day" />
+      <p>
+        {anecdotes[selected]} <br /> has {vote[selected]} votes
+      </p>
       <Button handleClick={() => addVote(selected)} textButton="vote" />
       <Button handleClick={randomAnecdote} textButton="next anecdote" />
+
+      <Title text="Anecdote with the most votes" />
+      {mostVote > 0 ? (
+        <p>
+          {anecdotes[mostVote]} <br /> has {vote[mostVote]} votes
+        </p>
+      ) : (
+        <p>No votes yet</p>
+      )}
     </>
   );
 };
