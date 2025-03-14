@@ -12,13 +12,24 @@ const App = () => {
       name: newName,
     };
 
-    console.log(nameObject);
+    // console.log(nameObject);
+
+    const personExists = persons.some(
+      (person) => person.name === nameObject.name
+    );
+
+    console.log(personExists);
+    
+    if (personExists) {
+      alert(newName + "is already added to phonebook");
+      event.cancelable(); // evento cancelado
+    }
 
     setPersons(persons.concat(nameObject));
     setNewName("");
   };
 
-  const handleNameChange = () => setNewName(event.target.value);
+  const handleNameChange = (event) => setNewName(event.target.value);
 
   return (
     <div>
