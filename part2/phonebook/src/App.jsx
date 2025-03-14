@@ -1,4 +1,7 @@
 import { useState } from "react";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -10,7 +13,6 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [nameFilter, setNameFilter] = useState("");
-  const [newPersons, setNewPersons] = useState([]);
 
   // console.log(persons);
 
@@ -19,13 +21,14 @@ const App = () => {
     const nameObject = {
       name: newName,
       number: newNumber,
+      id: persons.length + 1,
     };
 
     // console.log(nameObject);
 
     const personExists = persons.some(
       (person) => person.name === nameObject.name
-    );
+    ); // return a boolean
 
     // console.log(personExists);
 
@@ -42,47 +45,36 @@ const App = () => {
 
   const handleNameChange = (event) => setNewName(event.target.value);
   const handleNumberChange = (event) => setNewNumber(event.target.value);
+  const handleNameFilterChange = (event) => setNameFilter(event.target.value);
 
-  const handleNameFilterChange = (event) => {
-    const nameFilter = event.target.value.toLowerCase();
-    setNameFilter(nameFilter);
-    const newPersons = persons.filter((person) =>
-      // convertimos en minuscula para evitar problema de comparacion
-      // usamos .includes() para saber que caracter incluye la cadena enviada por el evento
-      person.name.toLowerCase().includes(nameFilter)
-    );
-    // console.log(newPersons);
-    setNewPersons(newPersons);
-  };
+  // convertimos en minuscula para evitar problema de comparacion
+  // usamos .includes() para saber que caracter incluye la cadena enviada por el evento
+  const searchContacts = persons.filter((person) =>
+    person.name.toLowerCase().includes(nameFilter)
+  );
+
+  // console.log(searchContacts);
 
   return (
-    <div>
+    <>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with{" "}
-        <input value={nameFilter} onChange={handleNameFilterChange} />
-      </div>
+      <Filter
+        nameFilter={nameFilter}
+        handleNameFilterChange={handleNameFilterChange}
+      />
 
-      <h2>add a new</h2>
-      <form onSubmit={addContact}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
+      <h3>add a new</h3>
+      <PersonForm
+        addContact={addContact}
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}
+      />
 
-      {(newPersons.length === 0 ? persons : newPersons).map((person) => (
-        <p key={person.name}>
-          {person.name} {person.number}{" "}
-        </p>
-      ))}
-    </div>
+      <h3>Numbers</h3>
+      <Persons newPersons={searchContacts} />
+    </>
   );
 };
 
