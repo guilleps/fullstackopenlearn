@@ -11,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [nameFilter, setNameFilter] = useState("");
   const [addMessage, setAddMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     numberService.getAllContacts().then((personList) => setPersons(personList));
@@ -46,6 +47,10 @@ const App = () => {
             );
             setNewName("");
             setNewNumber("");
+          })
+          .catch(error => {
+            setErrorMessage(`Information of ${newPerson.name} has already been removed from server`)
+            setPersons(persons.filter(p => p.id !== personExists.id))
           });
       }
       return;
@@ -93,7 +98,8 @@ const App = () => {
   return (
     <>
       <h2>Phonebook</h2>
-      { !addMessage ? null : <Notification message={addMessage}/> }
+      <Notification message={addMessage} type='success'/>
+      <Notification message={errorMessage} type='error'/>
       <Filter
         nameFilter={nameFilter}
         handleNameFilterChange={handleNameFilterChange}
