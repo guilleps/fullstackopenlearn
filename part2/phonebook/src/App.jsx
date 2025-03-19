@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
-import { useEffect } from "react";
-import numberService from "./services/Number";
+import numberService from "./services/contacts";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -12,9 +11,8 @@ const App = () => {
   const [nameFilter, setNameFilter] = useState("");
 
   useEffect(() => {
-    numberService.getAllNumbers().then((personList) => setPersons(personList));
+    numberService.getAllContacts().then((personList) => setPersons(personList));
   }, []);
-
   // console.log(persons);
 
   const addContact = (event) => {
@@ -24,22 +22,34 @@ const App = () => {
       number: newNumber,
       // id: persons.length + 1,
     };
-
     // console.log(nameObject);
 
-    const personExists = persons.some(
-      (person) => person.name === nameObject.name
-    ); // return a boolean
-
+    const personExists = persons.find((p) => p.name === nameObject.name);
     // console.log(personExists);
 
     if (personExists) {
-      alert(newName + "is already added to phonebook");
-      event.cancelable(); // evento cancelado
+
+      if (window.confirm(`${personExists.name} is already added to phonebook, replace the old number with a new one?`)) {
+        const newPerson = {
+          ...personExists,
+          number: newNumber,
+        };
+        // console.log(newPerson);
+
+        numberService
+          .updateContact(personExists.id, newPerson)
+          .then((updatedContact) => {
+            setPersons(
+              persons.map((p) => (p.id !== personExists.id ? p : updatedContact))
+            );
+            setNewName("");
+            setNewNumber("");
+          });
+      }
       return;
     }
 
-    numberService.postNumber(nameObject).then((newPerson) => {
+    numberService.createContact(nameObject).then((newPerson) => {
       setPersons(persons.concat(newPerson));
       setNewName("");
       setNewNumber("");
@@ -52,22 +62,25 @@ const App = () => {
 
   // convertimos en minuscula para evitar problema de comparacion
   // usamos .includes() para saber que caracter incluye la cadena enviada por el evento
-  const searchContacts = persons.filter((person) =>
+  const searchContacts = nameFilter ? persons.filter((person) =>
     person.name.toLowerCase().includes(nameFilter)
-  );
-
+  ) : persons;
   // console.log(searchContacts);
 
   const deleteNumberClicked = (id) => {
     const personFinded = persons.find((p) => p.id === id);
     if (window.confirm(`Delete ${personFinded.name} ?`)) {
       numberService
-        .deletePerson(id)
+        .deleteContact(id)
         .then(() => {
           setPersons(persons.filter((person) => person.id !== id));
         })
+        .catch((error) =>
+          console.log(
+            `Not found ${personFinded.name} contact: ${error.message}`
+          )
+        );
     }
-
   };
 
   return (
