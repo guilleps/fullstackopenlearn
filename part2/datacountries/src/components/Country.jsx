@@ -1,5 +1,5 @@
 const Country = ({ country }) => {
-    if (!country || country > 1) { return null}
+    if (!country) { return null}
   //   console.log("from CountryComponente", country);
   //   console.log("languages", languages);
   //   console.log("languages", Object.values(languages));
