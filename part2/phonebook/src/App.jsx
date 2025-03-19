@@ -12,9 +12,7 @@ const App = () => {
   const [nameFilter, setNameFilter] = useState("");
 
   useEffect(() => {
-    numberService
-      .getAllNumbers()
-      .then((personList) => setPersons(personList));
+    numberService.getAllNumbers().then((personList) => setPersons(personList));
   }, []);
 
   // console.log(persons);
@@ -41,13 +39,11 @@ const App = () => {
       return;
     }
 
-    numberService
-      .postNumber(nameObject)
-        .then((newPerson) => {
-          setPersons(persons.concat(newPerson));
-          setNewName("");
-          setNewNumber("");
-        });
+    numberService.postNumber(nameObject).then((newPerson) => {
+      setPersons(persons.concat(newPerson));
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   const handleNameChange = (event) => setNewName(event.target.value);
@@ -61,6 +57,18 @@ const App = () => {
   );
 
   // console.log(searchContacts);
+
+  const deleteNumberClicked = (id) => {
+    const personFinded = persons.find((p) => p.id === id);
+    if (window.confirm(`Delete ${personFinded.name} ?`)) {
+      numberService
+        .deletePerson(id)
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+    }
+
+  };
 
   return (
     <>
@@ -80,7 +88,13 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Persons newPersons={searchContacts} />
+      {searchContacts.map((person) => (
+        <Persons
+          key={person.id}
+          person={person}
+          deleteNumber={() => deleteNumberClicked(person.id)}
+        />
+      ))}
     </>
   );
 };

@@ -9,7 +9,16 @@ const postNumber = async (newContact) => {
   return axios.post(apiUrl, newContact).then((res) => res.data);
 };
 
+const deletePerson = async (id) => {
+  return axios
+    .delete(`${apiUrl}/${id}`)
+    .then((res) =>
+      console.log(res.data.name + "' phone was deleted")
+    );
+};
+
 export default {
-    getAllNumbers,
-    postNumber
+  getAllNumbers,
+  postNumber,
+  deletePerson,
 };
