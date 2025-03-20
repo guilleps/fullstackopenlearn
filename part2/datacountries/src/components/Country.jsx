@@ -1,29 +1,71 @@
-const Country = ({ country }) => {
-    if (!country) { return null}
-  //   console.log("from CountryComponente", country);
-  //   console.log("languages", languages);
-  //   console.log("languages", Object.values(languages));
+import { useEffect, useState } from "react";
+import temperatureService from "../services/temperature";
 
-  const countryName = country.name.common;
+const Country = ({ country }) => {
+  if (!country) return null;
+
+  const {
+    name: { common: countryName },
+    area,
+    languages,
+    flags,
+    capitalInfo,
+  } = country;
+
+  const [currentWeather, setCurrentWeather] = useState({
+    icon: null,
+    tempCelsius: null,
+    speedWind: null,
+    description: null
+  });
+
   const countryCapital = country.capital[0];
-  const countryArea = country.area;
-  const languages = country.languages;
-  const flag = country.flags.png;
+  const [lat, lng] = capitalInfo.latlng;
+
+  useEffect(() => {
+    temperatureService
+      .getWeather(lat, lng)
+      .then((data) => {
+        // console.log(data);
+        setCurrentWeather({
+          icon: data.weather[0].icon,
+          tempCelsius: (data.main.temp - 273.15).toFixed(2),
+          speedWind: data.wind.speed,
+          description: data.weather[0].description
+        });
+      });
+  }, [country]);
 
   return (
     <>
       <div>
         <h1>{countryName}</h1>
-        <p>Capital {countryCapital} <br /> Area {countryArea}</p>
+        <p>
+          Capital {countryCapital} <br /> Area {area}
+        </p>
 
         <h2>Languages</h2>
         <ul>
-          {Object.values(languages).map((l) => (
-            <li>{l}</li>
+          {Object.values(languages).map((l, i) => (
+            <li key={i}>{l}</li>
           ))}
         </ul>
 
-        <img src={flag} alt={countryName} />
+        <img src={flags.png} alt={flags.alt} />
+
+        {currentWeather ? (
+          <>
+            <h2>Weather in {countryCapital}</h2>
+            <p>Temperature {currentWeather.tempCelsius} Celsius</p>
+            <img
+              src={`https://openweathermap.org/img/wn/${currentWeather.icon}.png`}
+              alt={currentWeather.description}
+            />
+            <p>Wind {currentWeather.speedWind} m/s</p>
+          </>
+        ) : (
+          <p>Loading weather data...</p>
+        )}
       </div>
     </>
   );
