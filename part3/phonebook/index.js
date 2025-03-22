@@ -24,9 +24,14 @@ const persons = [
   },
 ];
 
-app.get('/api/persons', (req, res) => {
-    return res.json(persons)
-})
+app.get("/api/persons", (req, res) => {
+  return res.json(persons);
+});
+
+app.get("/info", (req, res) => {
+  const responseInfo = `<p>Phonebook has info for 2 people </p> <p>${new Date()}</p>`;
+  res.send(responseInfo);
+});
 
 const port = 3000 || process.env.PORT;
 app.listen(port, () => {
