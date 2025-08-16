@@ -34,8 +34,16 @@ app.get("/api/persons/:id", (req, res) => {
   res.status(200).json(personFinded)
 });
 
+app.delete('/api/persons/:id', (req, res) => {
+    const { id } = req.params
+    const newListPersons = persons.filter(p => p.id !== Number(id));
+    console.log(newListPersons);
+    
+    res.status(204).json(newListPersons)
+})
+
 app.get("/info", (req, res) => {
-  const responseInfo = `<p>Phonebook has info for 2 people </p> <p>${new Date()}</p>`;
+  const responseInfo = `<p>Phonebook has info for ${persons.length} people </p> <p>${new Date()}</p>`;
   res.send(responseInfo);
 });
 
